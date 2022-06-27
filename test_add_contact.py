@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest
+from contact import Contact
 
 
 class TestAddContact(unittest.TestCase):
@@ -18,9 +19,9 @@ class TestAddContact(unittest.TestCase):
         wd = self.wd
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
-        self.create_contact(wd, name="firstName", last_name="lastName", nick_name="nickName",
-                            company_name="companyName", address="testAddress", phone_number="+79999999999",
-                            email="email@domain.com", b_day="5", b_month="May", b_year="1999")
+        self.create_contact(wd, Contact(name="firstName", last_name="lastName", nick_name="nickName",
+                                        company_name="companyName", address="testAddress", phone_number="+79999999999",
+                                        email="email@domain.com", b_day="5", b_month="May", b_year="1999"))
         self.return_to_home_page(wd)
         self.logout(wd)
 
@@ -30,40 +31,39 @@ class TestAddContact(unittest.TestCase):
     def return_to_home_page(self, wd):
         wd.find_element(By.LINK_TEXT, "home page").click()
 
-    def create_contact(self, wd, name, last_name, nick_name, company_name, address, phone_number, email, b_day, b_month,
-                       b_year):
+    def create_contact(self, wd, contact):
         # init contact creation
         wd.find_element(By.LINK_TEXT, "add new").click()
         # fill the form
         wd.get("http://localhost/addressbook/edit.php")
         wd.find_element(By.NAME, "firstname").click()
         wd.find_element(By.NAME, "firstname").clear()
-        wd.find_element(By.NAME, "firstname").send_keys(name)
+        wd.find_element(By.NAME, "firstname").send_keys(contact.name)
         wd.find_element(By.NAME, "lastname").click()
         wd.find_element(By.NAME, "lastname").clear()
-        wd.find_element(By.NAME, "lastname").send_keys(last_name)
+        wd.find_element(By.NAME, "lastname").send_keys(contact.last_name)
         wd.find_element(By.NAME, "nickname").click()
         wd.find_element(By.NAME, "nickname").clear()
-        wd.find_element(By.NAME, "nickname").send_keys(nick_name)
+        wd.find_element(By.NAME, "nickname").send_keys(contact.nick_name)
         wd.find_element(By.NAME, "company").click()
         wd.find_element(By.NAME, "company").clear()
-        wd.find_element(By.NAME, "company").send_keys(company_name)
+        wd.find_element(By.NAME, "company").send_keys(contact.company_name)
         wd.find_element(By.NAME, "address").click()
         wd.find_element(By.NAME, "address").clear()
-        wd.find_element(By.NAME, "address").send_keys(address)
+        wd.find_element(By.NAME, "address").send_keys(contact.address)
         wd.find_element(By.NAME, "mobile").click()
         wd.find_element(By.NAME, "mobile").clear()
-        wd.find_element(By.NAME, "mobile").send_keys(phone_number)
+        wd.find_element(By.NAME, "mobile").send_keys(contact.phone_number)
         wd.find_element(By.NAME, "email").click()
         wd.find_element(By.NAME, "email").clear()
-        wd.find_element(By.NAME, "email").send_keys(email)
+        wd.find_element(By.NAME, "email").send_keys(contact.email)
         wd.find_element(By.NAME, "bday").click()
-        Select(wd.find_element(By.NAME, "bday")).select_by_visible_text(b_day)
+        Select(wd.find_element(By.NAME, "bday")).select_by_visible_text(contact.b_day)
         wd.find_element(By.NAME, "bmonth").click()
-        Select(wd.find_element(By.NAME, "bmonth")).select_by_visible_text(b_month)
+        Select(wd.find_element(By.NAME, "bmonth")).select_by_visible_text(contact.b_month)
         wd.find_element(By.NAME, "byear").click()
         wd.find_element(By.NAME, "byear").clear()
-        wd.find_element(By.NAME, "byear").send_keys(b_year)
+        wd.find_element(By.NAME, "byear").send_keys(contact.b_year)
         # submit
         wd.find_element(By.XPATH, "//div[@id='content']/form/input[@name='submit']").click()
 
